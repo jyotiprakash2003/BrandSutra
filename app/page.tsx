@@ -9,29 +9,29 @@ export default function Page() {
   return (
     <>
       <BrandHeader />
-      <main className="scroll-container min-h-dvh bg-[#000000] text-[#ffffff] font-sans">
+      <main className="min-h-dvh bg-[#000000] text-[#ffffff] font-sans">
         {/* Hero section */}
-        <section className="scroll-section align-left">
+        <section className="min-h-dvh w-full flex flex-col items-start justify-center relative p-6">
           <Hero />
         </section>
 
         {/* What We Do Section */}
-        <section className="scroll-section">
+        <section className="min-h-dvh w-full flex flex-col items-center justify-center relative py-20 px-6">
           <WhatWeDo />
         </section>
 
         {/* Who We Are Section */}
-        <section className="scroll-section">
+        <section className="min-h-dvh w-full flex flex-col items-center justify-center relative py-20 px-6">
           <WhoWeAre />
         </section>
 
         {/* Selected Work Section */}
-        <section className="scroll-section">
+        <section className="min-h-dvh w-full flex flex-col items-center justify-center relative py-20 px-6">
           <SelectedWork />
         </section>
 
         {/* Contact Us Section */}
-        <section className="scroll-section">
+        <section className="min-h-dvh w-full flex flex-col items-center justify-center relative py-20 px-6">
           <ContactUs />
         </section>
       </main>

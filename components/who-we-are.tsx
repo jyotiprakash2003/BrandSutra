@@ -1,38 +1,14 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react"
+import { useRef } from "react"
+import { motion, useInView } from "motion/react"
 
 export default function WhoWeAre() {
   const ref = useRef<HTMLDivElement | null>(null)
   const inView = useInView(ref, { amount: 0.35, margin: "0px 0px -10% 0px" })
-  const prefersReduced = useReducedMotion()
-  const [showWipe, setShowWipe] = useState(false)
-
-  useEffect(() => {
-    if (prefersReduced) return
-    if (inView) {
-      setShowWipe(true)
-      const t = setTimeout(() => setShowWipe(false), 1100)
-      return () => clearTimeout(t)
-    }
-  }, [inView, prefersReduced])
 
   return (
     <section ref={ref} aria-labelledby="who-title" className="relative isolate">
-      <AnimatePresence>
-        {!prefersReduced && showWipe && (
-          <motion.div
-            className="fixed inset-0 z-40 bg-white/95 dark:bg-black"
-            initial={{ scaleY: 0, originY: 0 }}
-            animate={{ scaleY: 1, originY: 0 }}
-            exit={{ scaleY: 0, originY: 1 }}
-            transition={{ duration: 1.1, ease: [0.65, 0, 0.35, 1] }}
-            aria-hidden="true"
-          />
-        )}
-      </AnimatePresence>
-
       <div className="relative z-10 mx-auto max-w-2xl px-6 text-center">
         <motion.h2
           id="who-title"

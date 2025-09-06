@@ -9,13 +9,11 @@ import { Label } from "@/components/ui/label";
 export default function ContactUs() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // You can add your form submission logic here,
-    // for example, sending the data to an API endpoint.
     alert("Form submitted! (placeholder)");
   };
 
   return (
-    <section id="contact" className="w-full max-w-2xl px-6 text-center">
+    <section id="contact" className="w-full max-w-2xl mx-auto px-6 text-center py-24 md:py-36">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

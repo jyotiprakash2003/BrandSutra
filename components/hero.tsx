@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section className="px-6">
+    <section className="pt-20 px-6">
       <div className="max-w-7xl text-left">
         <h1 className="text-pretty leading-tight font-extrabold uppercase">
           <span className="block text-7xl sm:text-8xl md:text-9xl text-[#8f8f8f] animate-rise-in anim-delay-0">
