@@ -1,43 +1,187 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import { motion, useInView } from "motion/react"
+import React, { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
 
-export default function WhoWeAre() {
-  const ref = useRef<HTMLDivElement | null>(null)
-  const inView = useInView(ref, { amount: 0.35, margin: "0px 0px -10% 0px" })
+export interface ChromaItem {
+  image: string;
+  title: string;
+  subtitle: string;
+  handle?: string;
+  location?: string;
+  borderColor?: string;
+  gradient?: string;
+  url?: string;
+}
+
+export interface ChromaGridProps {
+  items?: ChromaItem[];
+  className?: string;
+  radius?: number;
+  columns?: number;
+  rows?: number;
+  damping?: number;
+  fadeOut?: number;
+  ease?: string;
+}
+
+type SetterFn = (v: number | string) => void;
+
+export const ChromaGrid: React.FC<ChromaGridProps> = ({
+  items,
+  className = '',
+  radius = 300,
+  columns = 3,
+  rows = 1,
+  damping = 0.45,
+  fadeOut = 0.6,
+  ease = 'power3.out'
+}) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const fadeRef = useRef<HTMLDivElement>(null);
+  const setX = useRef<SetterFn | null>(null);
+  const setY = useRef<SetterFn | null>(null);
+  const pos = useRef({ x: 0, y: 0 });
+
+  const data = items || [];
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    setX.current = gsap.quickSetter(el, '--x', 'px') as SetterFn;
+    setY.current = gsap.quickSetter(el, '--y', 'px') as SetterFn;
+    const { width, height } = el.getBoundingClientRect();
+    pos.current = { x: width / 2, y: height / 2 };
+    if (setX.current) setX.current(pos.current.x);
+    if (setY.current) setY.current(pos.current.y);
+  }, []);
+
+  const moveTo = (x: number, y: number) => {
+    gsap.to(pos.current, {
+      x,
+      y,
+      duration: damping,
+      ease,
+      onUpdate: () => {
+        setX.current?.(pos.current.x);
+        setY.current?.(pos.current.y);
+      },
+      overwrite: true
+    });
+  };
+
+  const handleMove = (e: React.PointerEvent) => {
+    const r = rootRef.current!.getBoundingClientRect();
+    moveTo(e.clientX - r.left, e.clientY - r.top);
+    gsap.to(fadeRef.current, { opacity: 0, duration: 0.25, overwrite: true });
+  };
+
+  const handleLeave = () => {
+    gsap.to(fadeRef.current, {
+      opacity: 1,
+      duration: fadeOut,
+      overwrite: true
+    });
+  };
+
+  const handleCardClick = (url?: string) => {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleCardMove: React.MouseEventHandler<HTMLElement> = e => {
+    const card = e.currentTarget as HTMLElement;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  };
 
   return (
-    <section ref={ref} aria-labelledby="who-title" className="relative isolate">
-      <div className="relative z-10 mx-auto max-w-2xl px-6 text-center">
-        <motion.h2
-          id="who-title"
-          className="text-4xl md:text-6xl font-extrabold tracking-tight text-white"
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0.6, y: 12 }}
-          transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+    <div
+      ref={rootRef}
+      className={`chroma-grid ${className}`}
+      style={
+        {
+          '--r': `${radius}px`,
+          '--cols': columns,
+          '--rows': rows
+        } as React.CSSProperties
+      }
+      onPointerMove={handleMove}
+      onPointerLeave={handleLeave}
+    >
+      {data.map((c, i) => (
+        <article
+          key={i}
+          className="chroma-card"
+          onMouseMove={handleCardMove}
+          onClick={() => handleCardClick(c.url)}
+          style={
+            {
+              '--card-border': c.borderColor || 'transparent',
+              '--card-gradient': c.gradient,
+              cursor: c.url ? 'pointer' : 'default'
+            } as React.CSSProperties
+          }
         >
-          WHO ARE WE
-        </motion.h2>
+          <div className="chroma-img-wrapper">
+            <img src={c.image} alt={c.title} loading="lazy" />
+          </div>
+          <footer className="chroma-info">
+            <h3 className="name">{c.title}</h3>
+            {c.handle && <span className="handle">{c.handle}</span>}
+            <p className="role">{c.subtitle}</p>
+            {c.location && <span className="location">{c.location}</span>}
+          </footer>
+        </article>
+      ))}
+      <div className="chroma-overlay" />
+      <div ref={fadeRef} className="chroma-fade" />
+    </div>
+  );
+};
 
-        <motion.p
-          className="mt-6 text-base md:text-lg leading-relaxed text-white/85"
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0.8, y: 8 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.2, 0.8, 0.2, 1] }}
-        >
-          Just a bunch of college graduates who know business, and help building businesses.
-        </motion.p>
 
-        <motion.p
-          className="mt-2 text-sm md:text-base text-white/60"
-          initial={{ opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0.8, y: 6 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
-        >
-          More about us later 😉
-        </motion.p>
-      </div>
-    </section>
-  )
+export default function WhoWeAre() {
+    const teamMembers: ChromaItem[] = [
+      {
+        image: '/placeholder-user.jpg',
+        title: 'Jyoti Prakash',
+        subtitle: 'Founder & Brand Strategist',
+        handle: '@jyotiprakash',
+        borderColor: '#4F46E5',
+        gradient: 'linear-gradient(145deg, #4F46E5, #111)',
+        url: 'https://www.linkedin.com/'
+      },
+      {
+        image: '/placeholder-user.jpg',
+        title: 'Ayush Kumar',
+        subtitle: 'Creative Director',
+        handle: '@ayush',
+        borderColor: '#F59E0B',
+        gradient: 'linear-gradient(165deg, #F59E0B, #111)',
+        url: 'https://www.linkedin.com/'
+      },
+      {
+        image: '/placeholder-user.jpg',
+        title: 'Abhinav Singh',
+        subtitle: 'Marketing & Growth Lead',
+        handle: '@abhinav',
+        borderColor: '#10B981',
+        gradient: 'linear-gradient(210deg, #10B981, #111)',
+        url: 'https://www.linkedin.com/'
+      },
+    ];
+
+    return (
+        <div className="flex flex-col items-center justify-center h-full w-full">
+            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-12">
+                WHO ARE WE
+            </h2>
+            <ChromaGrid items={teamMembers} columns={3} rows={1} />
+        </div>
+    );
 }
