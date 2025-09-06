@@ -119,11 +119,11 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
@@ -199,9 +199,12 @@
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
+
+/* Styles for the Flowing Menu in What We Do Section */
 .menu-wrap {
   width: 100%;
   height: 100%;
+  max-height: 60vh;
   overflow: hidden;
 }
 
@@ -209,6 +212,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -218,7 +222,11 @@
   position: relative;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 -1px #fff;
+  box-shadow: 0 -1px rgba(255, 255, 255, 0.5);
+}
+
+.menu__item:first-child {
+  box-shadow: 0 1px rgba(255, 255, 255, 0.5), 0 -1px rgba(255, 255, 255, 0.5);
 }
 
 .menu__item-link {
@@ -231,17 +239,14 @@
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  font-weight: 600;
+  font-weight: 700;
   color: #fff;
-  font-size: 4vh;
+  font-size: clamp(2rem, 5vw, 4rem);
+  transition: color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .menu__item-link:hover {
   color: #060010;
-}
-
-.menu__item-link:focus:not(:focus-visible) {
-  color: #fff;
 }
 
 .marquee {
@@ -253,15 +258,11 @@
   height: 100%;
   pointer-events: none;
   background: #fff;
-  transform: translate3d(0, 101%, 0);
-  transition: transform 0.6s ease-expo;
 }
 
 .marquee__inner-wrap {
   height: 100%;
-  width: 200%;
-  display: flex;
-  transform: translateX(0);
+  width: 100%;
 }
 
 .marquee__inner {
@@ -269,40 +270,35 @@
   align-items: center;
   position: relative;
   height: 100%;
-  width: 200%;
+  width: 200%; /* Important for seamless looping */
   will-change: transform;
-  animation: marquee 15s linear infinite;
+  animation: marquee 20s linear infinite;
 }
 
 .marquee span {
   color: #060010;
   white-space: nowrap;
   text-transform: uppercase;
-  font-weight: 400;
-  font-size: 4vh;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 4rem);
   line-height: 1.2;
-  padding: 1vh 1vw 0;
+  padding: 1vh 2vw 0;
 }
 
 .marquee__img {
-  width: 200px;
-  height: 7vh;
-  margin: 2em 2vw;
-  padding: 1em 0;
-  border-radius: 50px;
+  width: 15vh;
+  height: 10vh;
+  margin: 0 2vw;
+  border-radius: 5rem;
   background-size: cover;
   background-position: 50% 50%;
-}
-
-.menu__item-link:hover + .marquee {
-  transform: translate3d(0, 0%, 0);
+  flex-shrink: 0;
 }
 
 @keyframes marquee {
   from {
     transform: translateX(0);
   }
-
   to {
     transform: translateX(-50%);
   }

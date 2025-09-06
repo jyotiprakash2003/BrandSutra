@@ -89,8 +89,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, image }) => {
         {text}
       </a>
       <div className="marquee" ref={marqueeRef}>
-        <div className="marquee__inner-wrap" ref={marqueeInnerRef}>
-          <div className="marquee__inner" aria-hidden="true">
+        <div className="marquee__inner-wrap">
+          <div className="marquee__inner" aria-hidden="true" ref={marqueeInnerRef}>
             {repeatedMarqueeContent}
           </div>
         </div>
@@ -123,5 +123,14 @@ export default function WhatWeDo() {
         },
     ];
 
-    return <FlowingMenu items={menuItems} />;
+    return (
+        <div className="flex flex-col h-full w-full">
+            <h2 className="text-center text-white font-extrabold uppercase tracking-wide text-balance text-4xl md:text-6xl lg:text-7xl mb-8 md:mb-12">
+                WHAT WE DO
+            </h2>
+            <div className="flex-grow relative">
+                <FlowingMenu items={menuItems} />
+            </div>
+        </div>
+    );
 }
