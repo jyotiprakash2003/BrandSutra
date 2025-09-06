@@ -19,7 +19,7 @@ export default function WhoWeAre() {
   }, [inView, prefersReduced])
 
   return (
-    <section ref={ref} aria-labelledby="who-title" className="relative isolate py-24 md:py-36">
+    <section ref={ref} aria-labelledby="who-title" className="relative isolate">
       <AnimatePresence>
         {!prefersReduced && showWipe && (
           <motion.div

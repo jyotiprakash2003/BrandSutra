@@ -32,7 +32,7 @@ const works: Work[] = [
 
 export default function SelectedWork() {
   return (
-    <section aria-labelledby="work-title" className="py-20 md:py-28">
+    <section aria-labelledby="work-title">
       <div className="mx-auto max-w-6xl px-6">
         <h2 id="work-title" className="text-balance text-3xl md:text-5xl font-extrabold text-white">
           Selected work

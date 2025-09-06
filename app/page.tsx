@@ -1,35 +1,40 @@
-// <CHANG\`\`\`tsx file="app/page.tsx"
-import BrandHeader from "@/components/brand-header"
-import Hero from "@/components/hero"
-import WhatWeDo from "@/components/what-we-do"
-import WhoWeAre from "@/components/who-we-are"
-import SelectedWork from "@/components/selected-work"
+import BrandHeader from "@/components/brand-header";
+import Hero from "@/components/hero";
+import WhatWeDo from "@/components/what-we-do";
+import WhoWeAre from "@/components/who-we-are";
+import SelectedWork from "@/components/selected-work";
+import ContactUs from "@/components/contact-us";
 
 export default function Page() {
   return (
-    <main className="min-h-dvh bg-[#000000] text-[#ffffff] font-sans">
-      {/* Top center brand header */}
+    <>
       <BrandHeader />
+      <main className="scroll-container min-h-dvh bg-[#000000] text-[#ffffff] font-sans">
+        {/* Hero section */}
+        <section className="scroll-section align-left">
+          <Hero />
+        </section>
 
-      {/* Hero section */}
-      <Hero />
+        {/* What We Do Section */}
+        <section className="scroll-section">
+          <WhatWeDo />
+        </section>
 
-      {/* Large spacer to match composition rhythm */}
-      <div className="h-44 md:h-56" aria-hidden="true" />
+        {/* Who We Are Section */}
+        <section className="scroll-section">
+          <WhoWeAre />
+        </section>
 
-      {/* Section title and cards */}
-      <WhatWeDo />
+        {/* Selected Work Section */}
+        <section className="scroll-section">
+          <SelectedWork />
+        </section>
 
-      {/* Transition to Who We Are */}
-      <div className="h-24 md:h-28" aria-hidden="true" />
-
-      <WhoWeAre />
-
-      {/* Selected work */}
-      <SelectedWork />
-
-      {/* Bottom breathing room */}
-      <div className="h-24" aria-hidden="true" />
-    </main>
-  )
+        {/* Contact Us Section */}
+        <section className="scroll-section">
+          <ContactUs />
+        </section>
+      </main>
+    </>
+  );
 }
